@@ -67,6 +67,18 @@ BLOCKED_COMPANIES = {
     "vn+",       # Barbados
 }
 
+# Ad/PR/marketing agencies — corporate side only
+BLOCKED_AGENCIES = {
+    "edelman", "weber shandwick", "fleishmanhillard", "fleishman hillard",
+    "golin", "ketchum", "burson", "bcw", "msl group", "ruder finn",
+    "ogilvy", "wpp", "publicis", "ipg", "omnicom", "dentsu", "havas",
+    "bbdo", "ddb", "mccann", "leo burnett", "grey", "fcb", "mullenlowe",
+    "droga5", "r/ga", "razorfish", "huge", "360i", "vmly&r",
+    "wunderman thompson", "saatchi", "tbwa", "jwt", "young & rubicam",
+    "hill+knowlton", "hill & knowlton", "praytell", "taylor strategy",
+    "blast media", "crossmedia", "160/90", "160over90",
+}
+
 # Household names / Fortune 500 / well-known brands — matched case-insensitively
 KNOWN_COMPANIES = {
     # Food & Beverage
@@ -213,7 +225,7 @@ def is_known_company(company):
 
 def is_blocked_company(company):
     c = company.lower()
-    return any(blocked in c for blocked in BLOCKED_COMPANIES)
+    return any(blocked in c for blocked in BLOCKED_COMPANIES | BLOCKED_AGENCIES)
 
 EXPLICIT_US = [
     "usa", "united states", "us only", "u.s.", "remote, us", "us remote",
@@ -337,10 +349,6 @@ GREENHOUSE_COMPANIES = {
     "constantcontact":   "Constant Contact",
     "squarespace":       "Squarespace",
     "godaddy":           "GoDaddy",
-    # Agencies / PR
-    "webershandwick":    "Weber Shandwick",
-    "fleishmanhillard":  "FleishmanHillard",
-    "golin":             "Golin",
     # News / Media
     "axios":             "Axios",
     "crunchyroll":       "Crunchyroll",
