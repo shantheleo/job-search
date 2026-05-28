@@ -1,0 +1,4 @@
+__pycache__/
+*.log
+.last_run
+sent_jobs.json.bak

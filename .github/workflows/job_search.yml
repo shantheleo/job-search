@@ -1,0 +1,37 @@
+name: Daily Job Search
+
+on:
+  schedule:
+    - cron: '0 13 * * *'  # 9am ET daily
+  workflow_dispatch:       # allow manual trigger from GitHub UI
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run job search
+        env:
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        run: |
+          rm -f .last_run
+          python job_search.py
+
+      - name: Save history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sent_jobs.json
+          git diff --staged --quiet || git commit -m "Update sent jobs history"
+          git push
