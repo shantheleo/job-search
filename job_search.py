@@ -333,11 +333,21 @@ GREENHOUSE_COMPANIES = {
     "intercom":          "Intercom",
     "twilio":            "Twilio",
     "asana":             "Asana",
+    "iterable":          "Iterable",
+    "constantcontact":   "Constant Contact",
+    "squarespace":       "Squarespace",
+    "godaddy":           "GoDaddy",
     # Agencies / PR
     "webershandwick":    "Weber Shandwick",
+    "fleishmanhillard":  "FleishmanHillard",
+    "golin":             "Golin",
+    # News / Media
+    "axios":             "Axios",
+    "crunchyroll":       "Crunchyroll",
     # Tickets / Events / Sports
     "seatgeek":          "SeatGeek",
-    # Food / Bev / Delivery
+    "fanduel":           "FanDuel",
+    # Food / Bev / Delivery / CPG
     "sweetgreen":        "Sweetgreen",
     "grubhub":           "Grubhub",
     "gopuff":            "GoPuff",
@@ -345,6 +355,21 @@ GREENHOUSE_COMPANIES = {
     "oatly":             "Oatly",
     "drizly":            "Drizly",
     "snackpass":         "Snackpass",
+    "hellofresh":        "HelloFresh",
+    "misfitsmarket":     "Misfits Market",
+    "thrivemarket":      "Thrive Market",
+    "hungryroot":        "Hungryroot",
+    "liquidiv":          "Liquid I.V.",
+    "kindsnacks":        "KIND Snacks",
+    "olly":              "Olly",
+    "ritual":            "Ritual",
+    # Beauty / Personal Care
+    "harrys":            "Harry's",
+    "glossier":          "Glossier",
+    "quip":              "Quip",
+    # Fashion / Lifestyle
+    "renttherunway":     "Rent the Runway",
+    "stitchfix":         "Stitch Fix",
 }
 
 
