@@ -23,7 +23,7 @@ jobs:
 
       - name: Run job search
         env:
-          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
           rm -f .last_run
           python job_search.py

@@ -7,19 +7,15 @@ Pulls mid-level marketing roles from RemoteOK + Jobicy, emails a curated digest.
 import html
 import json
 import os
-import smtplib
-import subprocess
 import sys
 import time as time_mod
 from datetime import datetime, timedelta
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from pathlib import Path
 import requests
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-GMAIL_SENDER = "shannawallace123@gmail.com"
-TO_EMAIL     = "shannawallace123@gmail.com"
+FROM_EMAIL = "jobs@yourdomain.com"   # update after verifying domain in Resend
+TO_EMAIL   = "shannawallace123@gmail.com"
 # ──────────────────────────────────────────────────────────────────────────────
 
 INCLUDE_TITLE_KW = [
@@ -705,34 +701,27 @@ def build_html(jobs, date_str):
 </body></html>"""
 
 
-def get_gmail_password():
-    """Read Gmail App Password from env var (GitHub Actions) or macOS Keychain (local)."""
-    pw = os.environ.get("GMAIL_PASSWORD")
-    if pw:
-        return pw
-    result = subprocess.run(
-        ["security", "find-internet-password", "-s", "smtp.gmail.com",
-         "-a", GMAIL_SENDER, "-w"],
-        capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        print("ERROR: Set GMAIL_PASSWORD env var or store in macOS Keychain.")
+def send_email(html_body, date_str, count):
+    api_key = os.environ.get("RESEND_API_KEY")
+    if not api_key:
+        print("ERROR: RESEND_API_KEY env var not set.")
         sys.exit(1)
-    return result.stdout.strip()
 
+    resp = requests.post(
+        "https://api.resend.com/emails",
+        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        json={
+            "from":    FROM_EMAIL,
+            "to":      [TO_EMAIL],
+            "subject": f"Job Digest ({count} listings) — {date_str}",
+            "html":    html_body,
+        },
+        timeout=15,
+    )
 
-def send_email(html, date_str, count):
-    password = get_gmail_password()
-
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"Job Digest ({count} listings) — {date_str}"
-    msg["From"]    = GMAIL_SENDER
-    msg["To"]      = TO_EMAIL
-    msg.attach(MIMEText(html, "html"))
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(GMAIL_SENDER, password)
-        server.sendmail(GMAIL_SENDER, TO_EMAIL, msg.as_string())
+    if resp.status_code not in (200, 201):
+        print(f"ERROR sending email: {resp.status_code} {resp.text}")
+        sys.exit(1)
 
     print(f"Email sent: {count} jobs — {date_str}")
 
