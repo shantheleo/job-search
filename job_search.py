@@ -14,7 +14,7 @@ from pathlib import Path
 import requests
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-FROM_EMAIL = "jobs@yourdomain.com"   # update after verifying domain in Resend
+FROM_EMAIL = "jobs@shantheleo.com"
 TO_EMAIL   = "shannawallace123@gmail.com"
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -702,9 +702,17 @@ def build_html(jobs, date_str):
 
 
 def send_email(html_body, date_str, count):
+    import subprocess
     api_key = os.environ.get("RESEND_API_KEY")
     if not api_key:
-        print("ERROR: RESEND_API_KEY env var not set.")
+        result = subprocess.run(
+            ["security", "find-generic-password", "-s", "resend-api", "-a", "job_search", "-w"],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            api_key = result.stdout.strip()
+    if not api_key:
+        print("ERROR: RESEND_API_KEY not found in env or Keychain.")
         sys.exit(1)
 
     resp = requests.post(
