@@ -1,8 +1,8 @@
 name: Daily Job Search
 
 on:
-  schedule:
-    - cron: '0 13 * * *'  # 9am ET daily
+  # schedule:
+  #   - cron: '0 13 * * *'  # 9am ET daily — PAUSED
   workflow_dispatch:       # allow manual trigger from GitHub UI
 
 jobs:
